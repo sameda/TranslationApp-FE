@@ -1,0 +1,6 @@
+<ul class="nav nav-pills nav-pills" role="tablist">
+    <li *ngFor="let item of menuItems"  routerLinkActive="active" class="nav-item">
+        <a [routerLink]="[item.path]"  routerLinkActive="active"  [routerLinkActiveOptions]="{exact:
+            true}" class="nav-link" data-toggle="tab" role="tablist" aria-expanded="false">{{item.title}}</a>
+    </li>   
+</ul>
