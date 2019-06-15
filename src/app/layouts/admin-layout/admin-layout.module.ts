@@ -13,7 +13,8 @@ import {
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule
+  MatSelectModule,
+  MatAutocompleteModule
 } from '@angular/material';
 import { CustomerEngagementComponent } from 'app/customer-engagement/customer-engagement.component';
 import { EmployeeEngagementComponent } from 'app/employee-engagement/employee-engagement.component';
@@ -29,6 +30,10 @@ import { SmsMessagesComponent  as EmployeeSmsComponent } from 'app/employee-enga
 import { ReviewSummaryComponent } from 'app/review-management/review-summary/review-summary.component';
 import { BadReviewComponent } from 'app/review-management/bad-review/bad-review.component';
 import { UserService } from 'app/service/user.service';
+import { TranslateService } from 'app/service/translate.service';
+import { DataTablesModule } from 'angular-datatables';
+import { SmsService } from 'app/service/sms.service';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +46,9 @@ import { UserService } from 'app/service/user.service';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    ComponentsModule
+    MatAutocompleteModule,
+    ComponentsModule,
+    DataTablesModule
   ],
   declarations: [
     DashboardComponent,
@@ -59,7 +66,7 @@ import { UserService } from 'app/service/user.service';
     ReviewSummaryComponent,
     BadReviewComponent
   ],
-  providers: [UserService]
+  providers: [UserService, TranslateService, SmsService]
 })
 
 export class AdminLayoutModule {}

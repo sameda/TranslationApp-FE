@@ -1,0 +1,58 @@
+    <div class="row">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header card-header">
+                    <h4 class="card-title">Send translated text via SMS</h4>
+                            </div>
+                <div class="card-body">
+                    <br>
+                    <form [formGroup]="translationForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group col-md-8">
+                                    <div class="dropdown">
+                                            <a href="#" class="btn btn-secondary dropdown-toggle col-md-12" data-toggle="dropdown">
+                                                    <span *ngIf="selectedLanguage == null">Language</span>
+                                                    <span *ngIf="selectedLanguage != null">{{selectedLanguage[0]}}</span>
+                                                <b class="caret"></b>
+                                            </a>
+                                            <ul class="dropdown-menu col-md-12 dropdown-height-250 ">
+                                                    <li class="form-group padding-left-base padding-right-base" style="margin-top: 0">
+                                                            <input type='search' class="form-control" placeholder="Search..." (input) ="languageChanged($event)" >
+                                                        </li>
+                                                <li *ngFor="let lang of languages"><a class="pointer" (click)="setLanguage(lang)">{{lang[0]}}</a></li>                                          
+                                            </ul>
+                                        </div>
+
+                            </div>
+                            <br>
+                           
+                            <div class="col-md-8 input-group ">                     
+                                    <mat-form-field class="example-full-width input-group">
+                                            <span class="input-group-addon">
+                                                    <i class="material-icons">call</i>
+                                                </span>
+                                        <input matInput placeholder="Phone number" formControlName="phoneNumber" type="text" >
+                                    </mat-form-field>
+                            </div>
+                        </div>
+                      
+                        <div class="col-md-6">
+                                <mat-form-field class="example-full-width ">                                  
+                                    <textarea matInput placeholder="Enter text in english" formControlName="text" rows="7"  >
+                                        </textarea>
+                                </mat-form-field>
+                        </div>
+                    </div>
+                    <br>
+                    <br>                  
+                    <button mat-raised-button class="btn btn-success pull-right" [disabled]="!translationForm.valid || selectedLanguage == null" (click)="translateAndSend()">Translate and send</button>
+                    <div class="clearfix"></div>
+                    </form>
+                </div>
+                    <div *ngIf="showLoading" class="loading-spinner-brand-blue-60-full-container"></div>
+            </div>
+ 
+        </div>       
+    </div>
+

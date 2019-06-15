@@ -17,11 +17,12 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { AuthenticationService } from './authentication/authentication.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './common/guard/auth-guard';
 import { UserContext } from './common/user.context';
 import { RegisterComponent } from './authentication/register/register.component';
 import { MatButtonModule, MatRippleModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatTooltipModule } from '@angular/material';
+import { AuthInterceptor } from './common/interceptor/auth.interceptor';
 
 @NgModule({
   imports: [
@@ -47,7 +48,12 @@ import { MatButtonModule, MatRippleModule, MatFormFieldModule, MatInputModule, M
     RegisterComponent
 
   ],
-  providers: [AuthenticationService, AuthGuard, UserContext],
+  providers: [AuthenticationService, AuthGuard, UserContext,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,46 @@
+<style>
+/*
+   server-side-angular-way.component.css
+*/
+.no-data-available {
+  text-align: center;
+}
+
+/*
+   src/styles.css (i.e. your global style)
+*/
+.dataTables_empty {
+  display: none;
+}
+
+::ng-deep .odd{ display: none }
+
+</style>
+        <br><br>
+        <table datatable [dtOptions]="dtOptions" class="row-border hover">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Date Created</th>
+                <th>Twilio id</th>
+                <th>Phone number</th>
+                <th>Language</th>
+                <th>Text</th>
+            </tr>
+            </thead>
+            <tbody *ngIf="smsLogs?.length != 0">
+                <tr *ngFor="let sms of smsLogs; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{ sms.createdDate | date: 'short' }}</td>
+                    <td>{{ sms.twilioId }}</td>
+                    <td>{{ sms.phoneNumber }}</td>
+                    <td>{{ sms.languageCode }}</td>
+                    <td>{{ sms.text }}</td>
+                </tr>
+            </tbody>
+            <tbody *ngIf="smsLogs?.length == 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+            <tbody>
+        </table>

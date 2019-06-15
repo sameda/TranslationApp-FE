@@ -25,7 +25,6 @@ export class UserProfileComponent implements OnInit {
   public getUserDetails() {
     let currentUser = new UserContext();
     this.currentUserId = currentUser.userID;
-    console.log(this.currentUserId)
     this.userService.getUserById(this.currentUserId).subscribe(resp => {
       this.currentUser = resp.body;
       this.patchForm();
@@ -69,7 +68,8 @@ export class UserProfileComponent implements OnInit {
     }
 
     this.userService.updateUser(this.currentUserId, userPatchDto).subscribe(resp => {    
-         HelperFunctions.showNotification('bottom', 'right', 'Successfully registered', 'success')        
+         HelperFunctions.showNotification('bottom', 'right', 'Successfully updated profile', 'success')
+         this.getUserDetails();        
     }, err => {
         let msg = "Something went wrong"; 
         if (err.detailedMessage)
