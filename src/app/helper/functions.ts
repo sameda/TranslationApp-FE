@@ -1,4 +1,5 @@
 import swal from 'sweetalert2';
+import { AbstractControl } from '@angular/forms';
 declare var $: any;
 
 export class HelperFunctions {
@@ -56,6 +57,18 @@ export class HelperFunctions {
             }
             //return JSON.parse(error.error);
         }
+
+    static passwordMatcher(c: AbstractControl): { [key: string]: boolean } | null {
+            let password = c.get('password');
+            let confirmpassword = c.get('rePassword');
+            if (password.pristine || confirmpassword.pristine) {
+              return null;
+            }
+            if (password.value === confirmpassword.value) {
+              return null;
+            }
+            return { 'match': true };
+          }
     
 
 }

@@ -2,15 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { SmsService } from 'app/service/sms.service';
 import { SmsLog, SmsLogPaginationData } from 'app/interface/sms/smsLog';
+import { GoogleLanguages } from 'app/helper/constant/languages';
 
 
 
-class DataTablesResponse {
-  data: any[];
-  draw: number;
-  recordsFiltered: number;
-  recordsTotal: number;
-}
 @Component({
   templateUrl: './sms-messages.component.html' 
 })
@@ -19,6 +14,9 @@ export class SmsMessagesComponent implements OnInit {
   dtOptions: DataTables.Settings = {};
   smsLogs: SmsLog [];
   smsLogsPaginationData: SmsLogPaginationData;
+  showLoading: boolean = true;
+  languages = GoogleLanguages;
+
   constructor(private smsService: SmsService) { }
 
   ngOnInit() {
@@ -26,15 +24,16 @@ export class SmsMessagesComponent implements OnInit {
 
     this.dtOptions = {
       pagingType: 'full_numbers',
-      pageLength: 2,
+      // pageLength: 2,
       serverSide: true,
       processing: true,
       info: false,
-      lengthMenu: [1, 2, 3, 5, 20],
+      lengthMenu: [5, 10, 20],
       ajax: (dataTablesParameters: any, callback) => {
         const queryData = this.parseQueryData(dataTablesParameters);
         that.smsService.getSmsLogs(queryData)
           .subscribe(resp => {
+            this.showLoading = false;
             that.smsLogs = resp.body.data;
             that.smsLogsPaginationData = resp.body
             callback({
@@ -42,13 +41,20 @@ export class SmsMessagesComponent implements OnInit {
               recordsFiltered: resp.body.totalElements,
               data: []
             });
+          }, err => {
+            this.showLoading = false;
           });
       },
-      columns: [{data:'createdDate', searchable:false, orderable:false},{ data: 'createdDate' }, { data: 'twilioId' }, { data: 'phoneNumber' }, { data: 'languageCode' }, { data: 'text' }]
+      columns: [{data:'createdDate', searchable:false, orderable:false},{ data: 'createdDate' }, { data: 'twilioId' }, { data: 'phoneNumber' },{data:'languageCode', searchable:false, orderable:false}, { data: 'languageCode' }, { data: 'text' }]
     };
   }
 
-
+  getLanguage(languageCode){
+    var language =  this.languages.find(lang => lang[1].toLowerCase() == languageCode.toLowerCase());
+    if(language)
+      return language[0]
+    return "";
+  }
 
   parseQueryData(dataTablesParameters: any){
 

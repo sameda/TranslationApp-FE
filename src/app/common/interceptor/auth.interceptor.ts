@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
          
     }, (err: any) => {      
       if (err instanceof HttpErrorResponse) {
-        if (err.status === 401) {
+        if (err.status === 401 && err.error.error == 'Unauthorized') {
           HelperFunctions.DisplayConfirmMessage('Session timeout', 'Please login to get a new session').then(resp=>{
             if(resp.value == true){
                 this.authService.logout();

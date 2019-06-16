@@ -7,11 +7,13 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { InnerNavbarComponent } from './inner-navbar/inner-navbar.component';
 import { LoaderComponent } from './loader/loader.component';
+import { MatProgressSpinnerModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     FooterComponent,
@@ -25,7 +27,9 @@ import { LoaderComponent } from './loader/loader.component';
     NavbarComponent,
     SidebarComponent,
     InnerNavbarComponent,
-    LoaderComponent
+    LoaderComponent,
+
+    
   ]
 })
 export class ComponentsModule { }

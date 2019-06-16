@@ -62,8 +62,14 @@ a.pointer {
   border-color: gray
 }
 
-.loading-spinner-brand-blue-60-full-container {
-  animation-play-state: running;
+.bg-login-image {
+    background: url("/assets/img/login-icon.png");
+    background-position: center;
+    background-size: cover
+  }
+
+    
+.loading-spinner {
   opacity: 1;
   position: relative;
   margin: 0 auto;
@@ -72,36 +78,8 @@ a.pointer {
   left: 0;
   right: 0;
   z-index: 1;
-  -webkit-transform: translate3d(0, -50%, 0);
-  -moz-transform: translate3d(0, -50%, 0);
-  -o-transform: translate3d(0, -50%, 0);
-  -ms-transform: translate3d(0, -50%, 0);
-  transform: translate3d(0, -50%, 0);
   text-align: center;
-  top: 50%; }
-@keyframes spinner {
-  0% {
-    transform: translate3d(-50%, -50%, 0) rotate(0deg); }
-  100% {
-    transform: translate3d(-50%, -50%, 0) rotate(360deg); } }
-  .loading-spinner-brand-blue-60-full-container.-paused {
-    animation-play-state: paused;
-    opacity: 0.2;
-    transition: opacity linear 0.1s; }
-  .loading-spinner-brand-blue-60-full-container::before {
-    display: inline-block;
-    animation: 1.5s linear infinite spinner;
-    animation-play-state: inherit;
-    border: solid 3px #dedede;
-    border-bottom-color: #2195F2;
-    border-radius: 50%;
-    content: "";
-    height: 60px;
-    left: 50%;
-    opacity: inherit;
-    position: absolute;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    width: 60px;
-    will-change: transform; }
+  top: 50%;
+ }
+
 

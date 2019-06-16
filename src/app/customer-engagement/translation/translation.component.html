@@ -6,8 +6,10 @@
                             </div>
                 <div class="card-body">
                     <br>
+   
                     <form [formGroup]="translationForm">
-                    <div class="row">
+                    <div class="row">                            
+                        
                         <div class="col-md-6">
                             <div class="form-group col-md-8">
                                     <div class="dropdown">
@@ -50,7 +52,8 @@
                     <div class="clearfix"></div>
                     </form>
                 </div>
-                    <div *ngIf="showLoading" class="loading-spinner-brand-blue-60-full-container"></div>
+                    <!-- <div *ngIf="showLoading" class="loading-spinner-brand-blue-60-full-container"></div> -->
+                    <app-loader  *ngIf="showLoading"></app-loader>
             </div>
  
         </div>       

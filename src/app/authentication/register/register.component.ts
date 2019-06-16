@@ -6,17 +6,7 @@ import { HelperFunctions } from 'app/helper/functions';
 import { Router } from '@angular/router';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
 
-function passwordMatcher(c: AbstractControl): { [key: string]: boolean } | null {
-  let password = c.get('password');
-  let confirmpassword = c.get('rePassword');
-  if (password.pristine || confirmpassword.pristine) {
-    return null;
-  }
-  if (password.value === confirmpassword.value) {
-    return null;
-  }
-  return { 'match': true };
-}
+
 
 @Component({
   templateUrl: './register.component.html',
@@ -43,7 +33,7 @@ export class RegisterComponent implements OnInit {
       passwordGroup: this.fb.group({
         password: ['', [Validators.required, Validators.minLength(6)]],
         rePassword: ['', [Validators.required, Validators.minLength(6)]]
-      }, { validator: passwordMatcher }),
+      }, { validator: HelperFunctions.passwordMatcher }),
 
     })
   }

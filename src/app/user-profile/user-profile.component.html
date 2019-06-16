@@ -11,7 +11,7 @@
                           <div class="row">
                               <div class="col-md-6">
                                 <mat-form-field class="example-full-width">
-                                    <input matInput formControlName="username" [readOnly]= "true" placeholder="Username" [disabled]="true">
+                                    <input matInput [value]="username" [readOnly]= "true" placeholder="Username" [disabled]="true">
                                   </mat-form-field>
                               </div>
         
@@ -58,6 +58,7 @@
                           <button mat-raised-button type="submit" [disabled]="!profileForm.valid" (click)="registerUser()" class="btn btn-success pull-right">Update Profile</button>
                           <div class="clearfix"></div>
                       </form>
+                      <app-loader  *ngIf="showLoading"></app-loader>
                   </div>
               </div>
           </div>       

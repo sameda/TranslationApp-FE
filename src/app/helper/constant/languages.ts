@@ -1,6 +1,6 @@
 //TODO: convert to array of objects
 export const GoogleLanguages = [
-    ['Abkhazian','ab'],
+    // ['Abkhazian','ab'],
     ['Afar','aa'],
     ['Afrikaans','af'],
     ['Albanian','sq'],

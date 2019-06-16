@@ -25,4 +25,8 @@ export class AuthenticationService {
     register(userRegisterDto: UserRegisterDto): Observable<HttpResponse<any>>  {
         return this.http.post(this.authenticationUrl + 'registerUser', userRegisterDto, {observe: 'response'})
     }
+
+    forgotPassword(forgotPassword: any): Observable<HttpResponse<any>>  {
+        return this.http.post(this.authenticationUrl + 'forgotPassword', forgotPassword, {observe: 'response'})
+    }
 }
