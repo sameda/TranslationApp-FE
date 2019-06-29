@@ -33,6 +33,7 @@ import { UserService } from 'app/service/user.service';
 import { TranslateService } from 'app/service/translate.service';
 import { DataTablesModule } from 'angular-datatables';
 import { SmsService } from 'app/service/sms.service';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { SmsService } from 'app/service/sms.service';
     MatTooltipModule,
     MatAutocompleteModule,
     ComponentsModule,
-    DataTablesModule
+    DataTablesModule,
+    FullCalendarModule
   ],
   declarations: [
     DashboardComponent,

@@ -50,6 +50,8 @@ export class SmsMessagesComponent implements OnInit {
   }
 
   getLanguage(languageCode){
+    if(!languageCode)
+      return ""
     var language =  this.languages.find(lang => lang[1].toLowerCase() == languageCode.toLowerCase());
     if(language)
       return language[0]

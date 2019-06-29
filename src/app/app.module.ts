@@ -10,10 +10,6 @@ import { ComponentsModule } from './components/components.module';
 
 import { AppComponent } from './app.component';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-
-
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './authentication/login/login.component';
 import { AuthenticationService } from './authentication/authentication.service';
@@ -26,6 +22,7 @@ import { AuthInterceptor } from './common/interceptor/auth.interceptor';
 import { ForgotPasswordComponent } from './authentication/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { UserService } from './service/user.service';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   imports: [
@@ -43,7 +40,7 @@ import { UserService } from './service/user.service';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-
+    FullCalendarModule 
   ],
   declarations: [
     AppComponent,

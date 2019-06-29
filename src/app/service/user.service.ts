@@ -36,5 +36,10 @@ export class UserService {
         return this.httpClientBackend.patch(this.mainUrl + 'ResetPassword', dto, {headers: headers, observe: 'response'});
     }
 
+    
+    public getAllUsers(): Observable<HttpResponse<any>> {
+        return this.http.get(this.mainUrl + 'GetAllUsers/', {observe: 'response'})
+    }
+
 
 }
