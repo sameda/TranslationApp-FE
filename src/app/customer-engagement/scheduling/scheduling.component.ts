@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
@@ -7,11 +7,15 @@ import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { UserService } from 'app/service/user.service';
 import { UserGetDto } from 'app/interface/user/user';
 import googleCalendarPlugin from '@fullcalendar/google-calendar';
-// import gapi from '@types/gapi/index'
-// import client from '@types/gapi/index'
+import { SchedulingService } from 'app/service/scheduling.service';
+import { EventGetDto, EventPostDto, EventPutDto } from 'app/interface/event/event';
+import { FullCalendarComponent } from '@fullcalendar/angular';
+import { UserContext } from 'app/common/user.context';
+import { Constants } from 'app/helper/constant/constants';
+
 declare var gapi: any;
-//declare var auth2: any;
-declare var client: any;
+// declare var client: any;
+// declare var $: any;
 
 
 @Component({
@@ -20,17 +24,24 @@ declare var client: any;
 export class SchedulingComponent implements OnInit {
 
   options: OptionsInput;
-  eventsModel: any;
+  eventsModel: any = [];
   users: UserGetDto
   eventSources: any;
   public auth2: any;
   client: any;
-  constructor(private userService: UserService) { }
+  allEvents: Array<EventGetDto>;
+  eventToRemove: any;
+  showLoading: boolean = false;
+  userContext: UserContext;
+
+  constructor(private userService: UserService, private schedulingService: SchedulingService
+    ) {
+      this.userContext = new UserContext();
+     }
 
   ngOnInit() {
+    this.getAllEvents();
     this.getAllUsers();
-    this.initializeCalendar();
-    this.googleStart();
   }
 
   initializeCalendar()
@@ -56,273 +67,282 @@ export class SchedulingComponent implements OnInit {
       },
       droppable: true,
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, googleCalendarPlugin],
-
+   
     
     };
+    // from google calendar    
+    // this.eventSources = [ 
+    //   {
+    //     googleCalendarId: 'projectteating@gmail.com',
+    //     color: 'yellow',
+    //     editable: false
+    //   }
+    // ]
 
-    this.eventsModel = [{
-      title: 'Existing Event',
-      start:  '2019-06-23 11:30',
-      end:  '2019-06-23 12:30',
-      date:'2019-06-23',
-      id: 'eventId',
-      groupId: "userId",
-      userId: 'id'
-    }];
 
-    this.eventSources = [ 
-      {
-        googleCalendarId: 'projectteating@gmail.com',
-        color: 'yellow',
-        editable: false
-      }
-    ]
-
-    // this.eventsModel = {
-    //   googleCalendarId: 'projectteating@gmail.com',
-    //   color: 'yellow'
-    // }
   }  
 
-  googleAuthenticate(){
-    //this.authenticate();
+  // google calendar section starts here
   
-  }
-
   googleStart(){
     let that = this;
-
     gapi.load('client:auth2', function() {
       that.auth2 = gapi.auth2.init({
-        client_id: "882812124114-ac2tjvbcefb7dtdkugf7thf29jok0r83.apps.googleusercontent.com",
+        client_id: Constants.GoogleCalendarClientId,
         // cookiepolicy: 'single_host_origin',
         scope:  "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
       });
-    //   that.client =       gapi.client.init({
-    //     apiKey: "AIzaSyDHieOCrrHdkHheNC49ifMH9pAL0qnjHDE",
-    //     client_id: "882812124114-ac2tjvbcefb7dtdkugf7thf29jok0r83.apps.googleusercontent.com",
-    //     scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
-    // });
-    // console.log(that.client)
-    console.log(that.auth2)
-    gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"})
-        .then(function() {
-           console.log("Sign-in successful"); 
-           gapi.client.setApiKey("AIzaSyDHieOCrrHdkHheNC49ifMH9pAL0qnjHDE");
-           return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
-               .then(function() { console.log("GAPI client loaded for API"); 
-               console.log(gapi.client.calendar)
-               that.client = gapi.client;              
-               that.delete();
+
+      // if(parseInt(localStorage.getItem("expires_at")) > new Date().getTime())
+      //   that.loadClient();
+      // else {
+        // this will always be true
+        if(localStorage.getItem("refresh_token") == 'undefined' || !localStorage.getItem("refresh_token")){
+          that.loadClient();
+          gapi.auth2.getAuthInstance()
+            // ,accessType: 'offline', prompt:'consent' , approval_prompt:'force'
+            .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events", response_type: 'token id_token refresh_token'})
+            .then(function(resp) {
+              // this is never returned by gapi
+              // localStorage.setItem('refresh_token', resp.Zi.refresh_token)
+              // localStorage.setItem('access_token', resp.Zi.access_token)
+              // localStorage.setItem('expires_at', resp.Zi.expires_at != null? resp.Zi.expires_at: resp.Zi.expires_in*1000 + new Date().getTime() )
+              // console.log("Sign-in successful"); 
+              that.loadClient();
               },
-                     function(err) { console.error("Error loading GAPI client for API", err); });
-          //  console.log(that.client.calendar)
-          //  console.log(gapi.client.calendar)
-           
-          },
-          function(err) { console.error("Error signing in", err); });
-
-    //that.execute();
+              function(err) { console.error("Error signing in", err); });
+          }
+        // else {
+          // not possible for js
+          // call the api that gets the new access_token
+          // in case it fails,
+          // check this link https://www.oauth.com/oauth2-servers/making-authenticated-requests/refreshing-an-access-token/
+        // }
+     // }
   });
-}
+  }
 
-
-  // google
-  authenticate() {
-    console.log(gapi)    
+  loadClient(){  
     let that = this;
-
-    gapi.load('auth2', function () {
-        that.auth2 = gapi.auth2.init({
-        client_id: "882812124114-ac2tjvbcefb7dtdkugf7thf29jok0r83.apps.googleusercontent.com",
-        // cookiepolicy: 'single_host_origin',
-        scope:  "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
-      });
-      console.log(that.auth2)
-      console.log(that.client)
-      return gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"})
-        .then(function() {
-           console.log("Sign-in successful"); 
-           
-          //  gapi.load('client', function() {
-          //  that.client = gapi.client.init();
-          // });
-          //  that.loadClient() 
+      gapi.client.setApiKey(Constants.GoogleCalendarApiKey);
+      return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
+          .then(function() {
+              console.log("GAPI client loaded for API"); 
+              that.client = gapi.client;            
           },
-          function(err) { console.error("Error signing in", err); });
-
-      //that.attachSignin(that.element.nativeElement.firstChild);
-    });
-
-    gapi.load('client:auth2', function() {
-      that.client =       gapi.client.init({
-        apiKey: "AIzaSyDHieOCrrHdkHheNC49ifMH9pAL0qnjHDE",
-        client_id: "882812124114-ac2tjvbcefb7dtdkugf7thf29jok0r83.apps.googleusercontent.com",
-        scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"
-    })
-    console.log(that.client)
-
-  });
-
-
-    
-    // return auth2.getAuthInstance()
-    //     .signIn({scope: "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.events"})
-    //     .then(function() { console.log("Sign-in successful"); this.loadClient() },
-    //           function(err) { console.error("Error signing in", err); });
+          function(err) { console.error("Error loading GAPI client for API", err); });         
   }
 
-  public attachSignin(element) {
-    let that = this;
-    this.auth2.attachClickHandler(element, {},
-      function (googleUser) {
-
-        let profile = googleUser.getBasicProfile();
-        console.log('Token || ' + googleUser.getAuthResponse().id_token);
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-        //YOUR CODE HERE
-
-
-      }, function (error) {
-        console.log(JSON.stringify(error, undefined, 2));
-      });
-  }
-
-
-  loadClient() {
-    this.client.setApiKey("AIzaSyD9wk83WIl05v8mY0aelDBXLfAd4uBlCIg");
-    return client.load("https://content.googleapis.com/discovery/v1/apis/calendar/v3/rest")
-        .then(function() { console.log("GAPI client loaded for API"); this.execute()},
-              function(err) { console.error("Error loading GAPI client for API", err); });
-  }
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  insert() {
-    console.log(this.client.calendar)
+  insertToGoogle(eventPost: EventPostDto, noScheduling = false) {
+    if(eventPost.dateEnd == null)
+    // by default the event will last one hour
+    eventPost.dateEnd = new Date(eventPost.dateStart.getTime() + 3600000);
+    let that = this;
     return gapi.client.calendar.events.insert({
-      "key":"AIzaSyD9wk83WIl05v8mY0aelDBXLfAd4uBlCIg",
-      "calendarId": "projectteating@gmail.com",
+      "key": Constants.GoogleCalendarApiKey,
+      "calendarId": "primary",
       "resource": {
+        'summary': eventPost.title,
         'start': {
-          'dateTime': '2019-06-28T09:00:00-07:00'
-          
-        },
+            'dateTime': eventPost.dateStart            
+          }, 
         'end': {
-          'dateTime': '2019-06-29T17:00:00-07:00'
-         
-        },
+            'dateTime': eventPost.dateEnd           
+          }
       }
     })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-                console.log(response.result.id)
-                // auth2.init({client_id: "688951263087-qe92qojkr080u59999l0k2q65fqsg3ia.apps.googleusercontent.com"});
-              },
-              function(err) { console.error("Execute error", err); });
+    .then(function(response) {
+            eventPost.googleId = response.result.id;
+            that.saveEvent(eventPost, noScheduling);              
+          },
+          function(err) {                           
+            //  if(err.status == 401)
+            //   localStorage.setItem("expires_at", "0")
+            that.saveEvent(eventPost, noScheduling);
+          });
   }
 
-  update() {
-
+  updateToGoogle(eventPut: EventPutDto, noSchedulerChanges = false ) {
+    let that = this;
     return gapi.client.calendar.events.update({
-      "key":"AIzaSyD9wk83WIl05v8mY0aelDBXLfAd4uBlCIg",
-      "calendarId": "projectteating@gmail.com",
-      "eventId": "mbg1ik21ln90gvnvsrimnmh9j8",
+      "key": Constants.GoogleCalendarApiKey,
+      "calendarId": "primary",
+      "eventId": eventPut.googleId,
       "resource": {
-        'summary':'New title 2',
+        'summary':eventPut.title,
         'start': {
-          'dateTime': '2019-06-28T09:00:00-07:00'
+          'dateTime': eventPut.dateStart
           
         },
         'end': {
-          'dateTime': '2019-06-28T10:00:00-07:00'
+          'dateTime': eventPut.dateEnd
          
         },
       }
     })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-                console.log(response.result.id)
-                // auth2.init({client_id: "688951263087-qe92qojkr080u59999l0k2q65fqsg3ia.apps.googleusercontent.com"});
-              },
-              function(err) { console.error("Execute error", err); });
+    .then(function(response) {
+            // Handle the results here (response.result has the parsed body).
+            that.updateEvent(eventPut, noSchedulerChanges);     
+          },
+          function(err) { console.error("Execute error", err); 
+          that.updateEvent(eventPut, noSchedulerChanges);     
+    });
   }
 
 
-  delete() {
-
+  deleteToGoogle(eventId, googleId) {
+    let that = this;
     return gapi.client.calendar.events.delete({
-      "key":"AIzaSyD9wk83WIl05v8mY0aelDBXLfAd4uBlCIg",
-      "calendarId": "projectteating@gmail.com",
-      "eventId": "mbg1ik21ln90gvnvsrimnmh9j8",
+      "key": Constants.GoogleCalendarApiKey,
+      "calendarId": "primary",
+      "eventId": googleId,
      
     })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-                console.log(response.result.id)
-              
-              },
-              function(err) { console.error("Execute error", err); });
+    .then(function(response) {
+            that.deleteEvent(eventId);              
+          },
+          function(err) {
+              that.deleteEvent(eventId);
+              console.error("Execute error", err); 
+      });
   }
-
-
-
-
-
-  // google //
+  // google calendar section ends here//
 
   getAllUsers(){
     this.userService.getAllUsers().subscribe(resp => {
       this.users = resp.body;
     })
   }
-
-  eventReceive(event: any){
-    console.log(event.event);
-    //save to db
-    //refresh calendar
+  
+  //TODO: filter by user id
+  getAllEvents(initCal = true){
+    this.showLoading = true;
+      this.schedulingService.getAllEventsByUserId(this.userContext.userID).subscribe(resp => {
+        this.allEvents = resp.body;
+        this.eventsModel = [];
+        this.allEvents.forEach(item => {
+          this.eventsModel.push({
+            title: item.title,
+            description: item.description,
+            start:  item.dateStart,
+            end:  item.dateEnd,    
+            id: item.id,
+            userId: item.user.id,
+            googleId: item.googleId,
+            attended: item.attended
+          })
+        })
+        this.showLoading = false;
+        if(initCal == true){
+          this.initializeCalendar();
+          this.googleStart();
+        }
+        if(this.eventToRemove)
+          this.eventToRemove.remove();
+      }, err => {
+        //loading....
+      })
   }
 
-  eventDrop(event: any){
-    // ne backend nese date start ska ndryshuar, mos i ndrysho schedulers, mund ta besh kontrollin qe ketu
-    console.log(event.event.extendedProps.userId)
-    console.log(event.event.id)
-    console.log(event.event.groupId)
-    console.log(event.event.start)
-    console.log(event.event.end)
-    console.log(event.oldEvent.start.getFullYear())
-    console.log(event.oldEvent.end)
+  // calendar events section
+  eventReceive(event: any){ 
+    this.showLoading = true; 
+    let eventPost: EventPostDto = {
+      attended:0,
+      //not always returned on login
+      creatorEmail: "",
+      dateEnd: event.event.end,
+      dateStart: event.event.start,
+      description: "",
+      googleId: "",
+      title: event.event.title,
+      userId: event.event.extendedProps.userId
+    }
+    this.insertToGoogle(eventPost, this.checkIfPastEvent(event.event));
+    // dragged from outside events are not removed on calendar refresh; need to manually remove them
+    this.eventToRemove = event.event;
+  }
+
+
+  eventDrop(event: any){    
+    this.showLoading = true;
+    let eventPut: EventPutDto = {
+      id: event.event.id,
+      attended:event.event.extendedProps.attended,
+      //not always returned on login
+      creatorEmail: "",
+      dateEnd: event.event.end,
+      dateStart: event.event.start,
+      description: "",
+      googleId: event.event.extendedProps.googleId,
+      title: event.event.title,
+      userId: event.event.extendedProps.userId
+    }
+    this.updateToGoogle(eventPut);
+
+    // console.log(event.oldEvent.start)
+    // console.log(event.oldEvent.end)
 
   }
 
   eventResize(event: any){
-    // mos i ndrysho schedulers
-    console.log(event.event.extendedProps.userId)
-    console.log(event.event.id)
-    console.log(event.event.groupId)
-    console.log(event.event.start)
-    console.log(event.event.end)
-
-    console.log(event.prevEvent.start)
-    console.log(event.prevEvent.end)
-
-    console.log(event.startDelta)
-    console.log(event.endDelta)
+    this.showLoading = true;
+    let eventPut: EventPutDto = {
+      id: event.event.id,
+      attended:event.event.extendedProps.attended,
+      //not always returned on login
+      creatorEmail: "",
+      dateEnd: event.event.end,
+      dateStart: event.event.start,
+      description: "",
+      googleId: event.event.extendedProps.googleId,
+      title: event.event.title,
+      userId: event.event.extendedProps.userId
+    }
+    // do not change schedulers on resize
+    this.updateToGoogle(eventPut, true);
 
   }
 
   eventClick(event: any){
-    console.log(event.event);
-    if(confirm("Are you sure you want to delete this event?"))
+    if(confirm("Are you sure you want to delete this event?")){
+      this.showLoading = true;
       event.event.remove();
+      this.deleteToGoogle(event.event.id, event.event.extendedProps.googleId)
+    }      
   }
 
+  // calendar events sectionn ends here
 
+  // saving to db
+  saveEvent(eventPost: EventPostDto, noScheduling = false) {
+    this.schedulingService.createEvent(eventPost, noScheduling).subscribe(resp => {
+      this.getAllEvents(false);
+    })
+  }
 
+  deleteEvent(eventId: number){
+    this.schedulingService.deleteEvent(eventId).subscribe(resp => {
+      this.showLoading = false;
+    })
+  }
+
+  updateEvent(eventPut: EventPutDto, noSchedulerChanges = false) {
+    this.schedulingService.updateEvent(eventPut, noSchedulerChanges).subscribe(resp => {
+      this.showLoading = false;
+    })
+  }
+
+  checkIfPastEvent(event) {
+    if(event.start)
+      return (event.start.getTime() - new Date().getTime()) < 0 
+    return true;   
+    
+  }
+
+  //TODO: if edit event details will be developed
+  checkIfDateStartChanged(event, oldEvent){
+   
+  }
 }

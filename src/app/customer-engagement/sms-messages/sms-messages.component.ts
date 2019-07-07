@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { SmsService } from 'app/service/sms.service';
 import { SmsLog, SmsLogPaginationData } from 'app/interface/sms/smsLog';
 import { GoogleLanguages } from 'app/helper/constant/languages';
+import { FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
+import { HelperFunctions } from 'app/helper/functions';
+import { BulkSmsDto } from 'app/interface/sms/bulkSms';
+import { SettingsService } from 'app/service/settings.service';
+import { SettingsGetDto } from 'app/interface/settings/settings';
 
 
 
@@ -16,10 +21,30 @@ export class SmsMessagesComponent implements OnInit {
   smsLogsPaginationData: SmsLogPaginationData;
   showLoading: boolean = true;
   languages = GoogleLanguages;
+  sendBulkSmsForm: FormGroup;
+  showBulkCapability: boolean = false;
 
-  constructor(private smsService: SmsService) { }
+  constructor(private fb: FormBuilder, private smsService: SmsService,
+              private settingsService: SettingsService) { }
 
   ngOnInit() {
+    this.getSettings()   
+    this.initTable();
+  }
+
+  getSettings(){
+    this.settingsService.getSettings().subscribe(resp => {
+      if(resp.body){
+        let setting: SettingsGetDto = resp.body.find(x=>x.id == 1)
+        if(setting && setting.value == true){
+          this.initForm();
+          this.showBulkCapability = true;
+        }       
+      }
+    })
+  }
+
+  initTable(){
     const that = this;
 
     this.dtOptions = {
@@ -45,7 +70,7 @@ export class SmsMessagesComponent implements OnInit {
             this.showLoading = false;
           });
       },
-      columns: [{data:'createdDate', searchable:false, orderable:false},{ data: 'createdDate' }, { data: 'twilioId' }, { data: 'phoneNumber' },{data:'languageCode', searchable:false, orderable:false}, { data: 'languageCode' }, { data: 'text' }]
+      columns: [{data:'createdDate', searchable:false, orderable:false},{ data: 'createdDate' }, { data: 'twilioId' }, { data: 'phoneNumber' },{data:'languageCode', searchable:false, orderable:false}, { data: 'languageCode' }, { data: 'text' }, {data: 'fromPhoneNumber'}, {data: 'serviceId'}]
     };
   }
 
@@ -86,6 +111,50 @@ export class SmsMessagesComponent implements OnInit {
     }
     return queryData;
    
+  }
+
+  // send bulk sms section
+  private initForm() {
+    this.sendBulkSmsForm = this.fb.group({
+      phoneNumbers: this.fb.array([this.initNewNumber()]),
+      text: ["", [Validators.required]]
+    })
+  }
+
+  private initNewNumber(): FormGroup {
+    return this.fb.group({
+        phoneNumber: ["", [Validators.required]],
+    })
+  }
+  public sendSms() {
+    this.showLoading = true;
+    let formValues = this.sendBulkSmsForm.value;
+    let phoneNumbers: Array<string> = formValues.phoneNumbers.map(x => x.phoneNumber);
+    const dto: BulkSmsDto = {
+      text: formValues.text,   
+      phoneNumbers: phoneNumbers,
+
+    }
+    this.smsService.sendBulkSms(dto).subscribe(resp => { 
+        this.showLoading = false;   
+         HelperFunctions.showNotification('bottom', 'right', 'Successfully sent', 'success')  
+    }, err => {
+        this.showLoading = false;
+        let msg = "Something went wrong"; 
+        if (err.detailedMessage)
+          msg = err.detailedMessage
+        else if(err.error.detailedMessage)
+          msg = err.error.detailedMessage
+        HelperFunctions.showNotification('bottom', 'right', msg, 'danger')
+      })
+  }
+
+  public addNewNumber() {
+    (this.sendBulkSmsForm.controls.phoneNumbers as FormArray).push(this.initNewNumber());
+  }
+
+  public removeNumber(index) {
+    (this.sendBulkSmsForm.controls.phoneNumbers as FormArray).removeAt(index);
   }
 
 }

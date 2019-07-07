@@ -14,7 +14,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/customer-engagement', title: 'Customer Engagement',  icon:'group', class: '' },
     { path: '/employee-engagement', title: 'Employee Engagement',  icon:'work', class: '' },
     { path: '/review-management', title: 'Review Management',  icon:'content_paste', class: '' },
-    { path: '/competitor-analysis', title: 'Competitor Analysis',  icon:'library_books', class: '' },
+    { path: '/competitor-edge', title: 'Competitor Edge',  icon:'library_books', class: '' },
     { path: '/user-profile', title: 'User Profile',  icon:'person', class: '' },
     { path: '/support', title: 'Support',  icon:'call', class: '' },
     // { path: '/table-list', title: 'Table List',  icon:'content_paste', class: '' },

@@ -1,7 +1,7 @@
 
-<div class="main-content">
+<div class="main-content" *ngIf="menuReady">
     <div class="container-fluid">
-        <inner-navbar [menuItems]="routes"></inner-navbar> 
+        <inner-navbar  [menuItems]="routes"></inner-navbar> 
         <router-outlet></router-outlet>
   </div>
 </div>

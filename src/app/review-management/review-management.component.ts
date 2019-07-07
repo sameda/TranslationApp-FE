@@ -8,8 +8,8 @@ import { RouteInfo } from 'app/interface/route-info';
 export class ReviewManagementComponent implements OnInit {
   
   public routes: RouteInfo [] = [
-    { path: '/review-management', title: 'Review Summary',  icon: '', class: '' },
-    { path: '/review-management/bad-review', title: 'Bad Review Protection',  icon: '', class: '' }
+    { path: '/review-management', title: 'Reviews',  icon: '', class: '' },
+    { path: '/review-management/bad-review', title: 'Bad Review Management',  icon: '', class: '' }
   ]
   constructor() { }
 

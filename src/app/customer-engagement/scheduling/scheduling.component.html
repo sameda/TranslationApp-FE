@@ -15,14 +15,14 @@
 <br/>
 <div class="row">
 <div class="col-md-10">
-<!-- [events]="eventsModel" -->
+<!--   [eventSources]="eventSources" -->
+<app-loader  *ngIf="showLoading"></app-loader>
 <full-calendar
   *ngIf="options"
   #fullcalendar
   [editable]="true"
   [droppable]="true"
   [events]="eventsModel"
-  [eventSources]="eventSources"
   [header]="options.header"
   (eventResize) ="eventResize($event)"
   (eventDrop)="eventDrop($event)"
@@ -32,6 +32,7 @@
   [googleCalendarApiKey]="'AIzaSyDHieOCrrHdkHheNC49ifMH9pAL0qnjHDE'"
 
 ></full-calendar>
+
 </div>
 
 <!-- <div id='mydraggable' data-event='{ title: "my event", duration: "02:00" }'>drag me</div> -->

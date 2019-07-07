@@ -15,5 +15,8 @@ export interface SmsLog {
     langugeCode: string,
     phoneNumber: string,
     text: string,
-    twilioId: string
+    twilioId: string,
+    serviceId: string,
+    fromPhoneNumber: string,
+    received: boolean
 }

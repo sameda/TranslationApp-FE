@@ -1,0 +1,47 @@
+<style>
+    #external-events {
+        width: 150px;
+        padding: 0 10px;
+        border: 1px solid #ccc;
+        background: #eee;
+    }
+
+    #external-events .fc-event {
+        margin: 1em 0;
+        cursor: move;
+    }
+</style>
+
+<br/>
+<div class="row">
+<div class="col-md-10">
+<!--   [eventSources]="eventSources" -->
+<app-loader  *ngIf="showLoading"></app-loader>
+<full-calendar
+    *ngIf="options"
+    #fullcalendar
+    [editable]="true"
+    [droppable]="true"
+    [events]="eventsModel"
+    [header]="options.header"
+    (eventResize) ="eventResize($event)"
+    (eventDrop)="eventDrop($event)"
+    (eventClick)="eventClick($event)"
+    (eventReceive)="eventReceive($event)"
+    [plugins]="options.plugins"
+    [googleCalendarApiKey]="'AIzaSyDHieOCrrHdkHheNC49ifMH9pAL0qnjHDE'"
+
+></full-calendar>
+
+</div>
+
+<!-- <div id='mydraggable' data-event='{ title: "my event", duration: "02:00" }'>drag me</div> -->
+<div class="col-md-2" id='external-events'>
+    <p>
+    <strong>Drag Users</strong>
+    </p>
+    <div *ngFor="let item of users" id="{{item.id}}" class='fc-event'>{{item.firstName}} {{item.lastName}}</div>
+    </div>
+</div>
+
+

@@ -1,0 +1,118 @@
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header card-header">
+                    <h4 class="card-title"> <i class="material-icons">settings</i>Configure options</h4>
+                </div>
+                <div class="card-body">
+                        <div class="togglebutton">
+                                <label>
+                                  <input type="checkbox" [(ngModel)]="enableBulk" [checked]="enableBulk">
+                                    <span class="toggle"></span>
+                                    Enable bulk messages
+                                </label>
+                        </div>
+                        <div class="togglebutton">
+                                <label>
+                                  <input type="checkbox" [(ngModel)]="enableTranslation" [checked]="enableTranslation">
+                                    <span class="toggle"></span>
+                                    Enable translation services
+                                </label>
+                        </div>
+                        <button mat-raised-button class="btn btn-success pull-right" (click)="saveSettings()">Save</button>
+                </div>
+            </div>
+        </div>
+</div>
+
+<br>
+<table datatable [dtOptions]="dtOptions" class="row-border hover">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Date Created</th>
+        <th>Twilio id</th>
+        <th>Sent to</th>
+        <th>Language</th>
+        <th>Language Code</th>
+        <th>Text</th>
+        <th>Received from</th>
+        <th>Service id</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="smsLogs?.length != 0">
+        <tr *ngFor="let sms of smsLogs; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{ sms.createdDate | date: 'short' }}</td>
+            <td>{{ sms.twilioId }}</td>
+            <td>{{ sms.phoneNumber }}</td>
+            <td>{{ getLanguage(sms.languageCode) }}</td>
+            <td>{{ sms.languageCode }}</td>
+            <td>{{ sms.text }}</td>
+            <td>{{ sms.fromPhoneNumber }}</td>
+            <td>{{ sms.serviceId }}</td>
+        </tr>
+    </tbody>
+    <tbody *ngIf="smsLogs?.length == 0">
+    <tr>
+        <td colspan="3" class="no-data-available">No data!</td>
+    </tr>
+    <tbody>
+</table>
+
+<!-- <div class="row">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header card-header">
+                <h4 class="card-title">Send SMS to multiple numbers</h4>
+                        </div>
+            <div class="card-body">
+                <br>
+                <form [formGroup]="sendBulkSmsForm">
+                <div class="row">                            
+                    <div formArrayName = "phoneNumbers" class="col-md-6">
+                        <button  class="btn btn-primary btn-link" title="Add new number" (click)="addNewNumber()">
+                            <i class="material-icons">add_circle_outline</i>
+                           Add 
+                        </button>
+                        <br/>
+                        <div class="col-md-12 input-group" *ngFor="let item of sendBulkSmsForm.controls.phoneNumbers.controls; let i =index">                     
+                            <div [formGroupName]="i" class = "row">        
+                                <div class="col-md-10">                     
+                                    <mat-form-field class="example-full-width input-group">
+                                            <span class="input-group-addon">
+                                                    <i class="material-icons">call</i>
+                                                </span>
+                                        <input matInput placeholder="Phone number {{i+1}}" formControlName="phoneNumber" type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <button (click)="removeNumber(i)" type="button" class="btn btn-link pull-right col-md-1 col-lg-1" 
+                                    title='Remove number'>
+                                    <i class="material-icons text-danger">highlight_off</i>
+                                    </button>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-6">
+                            <mat-form-field class="example-full-width ">                                  
+                                <textarea matInput placeholder="Enter text to send" formControlName="text" rows="7"  >
+                                    </textarea>
+                            </mat-form-field>
+                    </div>
+                </div>
+                <br>
+                <br>                  
+                <button mat-raised-button class="btn btn-success pull-right" [disabled]="!sendBulkSmsForm.valid || sendBulkSmsForm.controls.phoneNumbers.controls.length == 0" (click)="sendSms()">Send SMS</button>
+                <div class="clearfix"></div>
+                </form>
+            </div>
+              
+                <app-loader  *ngIf="showLoading"></app-loader>
+        </div>
+
+    </div>       
+</div> -->
+

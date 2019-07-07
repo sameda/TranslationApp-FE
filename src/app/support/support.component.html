@@ -1,0 +1,92 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header card-header">
+                        <h4 class="card-title"> Create a ticket</h4>
+                    </div>
+                    <div class="card-body">
+                   
+                        <form [formGroup]="ticketForm">                               
+                            <div class="input-group ">                     
+                                    <mat-form-field class="example-full-width input-group">
+                                        
+                                        <input matInput placeholder="Title(optional)" formControlName="title" type="text" >
+                                    </mat-form-field>
+                            </div>                                
+                            <br>
+                            
+                            <div >
+                                    <mat-form-field class="example-full-width ">                                  
+                                        <textarea matInput placeholder="Text" formControlName="text" rows="7"  >
+                                            </textarea>
+                                    </mat-form-field>
+                            </div>                         
+                            <br>
+                            <br>                  
+                            <button mat-raised-button class="btn btn-success pull-right" [disabled]="!ticketForm.valid" (click)="sendTicket()">Submit</button>
+                            <div class="clearfix"></div>
+                            <app-loader  *ngIf="showEmailLoading"></app-loader>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header card-header">
+                        <h4 class="card-title"> Send us a sms message</h4>
+                    </div>
+                    <div class="card-body">
+                        <form [formGroup]="smsForm">                              
+                              
+                            <br>
+                            <br>
+                            <br>
+                            
+                            <div >
+                                    <mat-form-field class="example-full-width ">                                  
+                                        <textarea matInput placeholder="Text" formControlName="text" rows="7"  >
+                                            </textarea>
+                                    </mat-form-field>
+                            </div>                         
+                            <br>
+                            <br>                  
+                            <button mat-raised-button class="btn btn-success pull-right" [disabled]="!smsForm.valid" (click)="sendSms()">Submit</button>
+                            <div class="clearfix"></div>
+                            <app-loader  *ngIf="showSmsLoading"></app-loader>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header card-header">
+                            <h4 class="card-title"> GIve us a call</h4>
+                        </div>
+                        <div class="card-body">
+                                <br>
+                                <br>
+                   
+                               
+                                    <ul>
+                                        <li>Toll free(USA only): 800-XXX-YYYY</li>
+                                        <li>Business WhatsApp: +1-617-XXX-YYYY</li>
+                                    </ul>
+                             
+                                <br>
+                                <br>
+                                <br>  
+                                <br>
+                                <br>
+                                <br>  
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                        </div>
+                    </div>
+            </div>
+        </div>
+</div>
+</div>

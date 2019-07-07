@@ -34,6 +34,22 @@ import { TranslateService } from 'app/service/translate.service';
 import { DataTablesModule } from 'angular-datatables';
 import { SmsService } from 'app/service/sms.service';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { SchedulingService } from 'app/service/scheduling.service';
+import { SettingsService } from 'app/service/settings.service';
+import { EmailComponent } from 'app/employee-engagement/email/email.component';
+import { FeedbackComponent } from 'app/employee-engagement/feedback/feedback.component';
+import { ReviewsComponent } from 'app/employee-engagement/reviews/reviews.component';
+import { TrendsComponent } from 'app/employee-engagement/trends/trends.component';
+import { CustomerEmailComponent } from 'app/customer-engagement/email/email.component';
+import { SocialComponent } from 'app/customer-engagement/social/social.component';
+import { ChatComponent } from 'app/customer-engagement/chat/chat.component';
+import { CallComponent } from 'app/customer-engagement/call/call.component';
+import { PrintComponent } from 'app/customer-engagement/print/print.component';
+import { AIComponent } from 'app/customer-engagement/AI/ai.component';
+import { EmailService } from 'app/service/email.service';
+import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.component';
+
+
 
 @NgModule({
   imports: [
@@ -66,9 +82,20 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     EmployeeSchedulingComponent,
     EmployeeSmsComponent,
     ReviewSummaryComponent,
-    BadReviewComponent
+    BadReviewComponent,
+    EmailComponent,
+    FeedbackComponent,
+    ReviewsComponent,
+    TrendsComponent,
+    CustomerEmailComponent,
+    SocialComponent, 
+    ChatComponent,
+    PrintComponent,
+    CallComponent,
+    AIComponent,
+    InfoPageComponent
   ],
-  providers: [UserService, TranslateService, SmsService]
+  providers: [UserService, TranslateService, SmsService, SchedulingService, SettingsService, EmailService]
 })
 
 export class AdminLayoutModule {}
