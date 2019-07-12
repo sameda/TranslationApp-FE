@@ -1,4 +1,11 @@
-
+<script src="https://www.google.com/recaptcha/api.js?render=6LciFK0UAAAAANd8YTRXpZLzySXUa_eN7VtRjiFR"></script>
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('6LciFK0UAAAAANd8YTRXpZLzySXUa_eN7VtRjiFR', {action: 'homepage'}).then(function(token) {
+      
+    });
+});
+</script>
         <div class="container">
       
           <!-- Outer Row -->
@@ -19,7 +26,7 @@
                         <div class="text-center">
                           <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                         </div>
-                        <form #loginForm="ngForm" name="form" (ngSubmit)="loginUser()" role="form">
+                        <form #loginForm="ngForm" name="form" (ngSubmit)="secureWithCaptcha()" role="form">
                           <div class="form-group">                              
                             <input type="input" name="username" [(ngModel)]="login.username" class="form-control"  placeholder="Enter Username" required>
                             <!-- <span class="help-block text-danger" *ngIf="loginForm.get('username').$dirty && form.username.$error.required" >Username is required</span> -->

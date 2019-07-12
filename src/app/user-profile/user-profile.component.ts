@@ -5,6 +5,7 @@ import { UserContext } from 'app/common/user.context';
 import { UserService } from 'app/service/user.service';
 import { HelperFunctions } from 'app/helper/functions';
 
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -20,9 +21,12 @@ export class UserProfileComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private userService: UserService) { }
 
+
+
   ngOnInit() {
     this.initForm();
     this.getUserDetails();
+
   }
 
   public getUserDetails() {

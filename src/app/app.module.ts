@@ -23,6 +23,9 @@ import { ForgotPasswordComponent } from './authentication/forgot-password/forgot
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { UserService } from './service/user.service';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
+import { Constants } from './helper/constant/constants';
 
 @NgModule({
   imports: [
@@ -32,6 +35,8 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     HttpModule,
     HttpClientModule,
     ComponentsModule,
+    RecaptchaV3Module,
+    RecaptchaFormsModule,
     RouterModule,
     AppRoutingModule,
     MatButtonModule,
@@ -40,7 +45,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
-    FullCalendarModule 
+    FullCalendarModule,
   ],
   declarations: [
     AppComponent,
@@ -52,6 +57,12 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
   ],
   providers: [AuthenticationService, UserService, AuthGuard, UserContext,
+     // {
+    //     provide: RECAPTCHA_SETTINGS,
+    //     useValue: { siteKey: '6LciFK0UAAAAANd8YTRXpZLzySXUa_eN7VtRjiFR' } as RecaptchaSettings,
+    //   },
+  
+    { provide: RECAPTCHA_V3_SITE_KEY, useValue: Constants.CaptchaSiteKey},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

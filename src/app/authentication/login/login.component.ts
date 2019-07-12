@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouteInfo } from 'app/interface/route-info';
 import { NgForm } from '@angular/forms';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
 import { HelperFunctions } from 'app/helper/functions';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 @Component({
   templateUrl: './login.component.html',
@@ -13,14 +14,28 @@ export class LoginComponent implements OnInit {
   
   login: any = {
     username: "",
-    password: ""
+    password: "",
+    captchaResponse: ""
   };
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+
+  constructor(private authenticationService: AuthenticationService, private router: Router,
+    private recaptchaV3Service: ReCaptchaV3Service
+    ) { }
 
   ngOnInit() {
+
   }
 
-  loginUser(){
+  secureWithCaptcha(){
+    this.recaptchaV3Service.execute('action')
+    .subscribe(token => {    
+      this.loginUser(token);
+      });
+  }
+    
+  
+  loginUser(token){
+    this.login.captchaResponse = token;
     this.authenticationService.login(this.login).subscribe(resp => {
       if(resp.status == 200) {
         // HelperFunctions.showNotification('bottom', 'right', 'Successfully logged in', 'success')

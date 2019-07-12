@@ -6,7 +6,6 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 
-
 import {
   MatButtonModule,
   MatInputModule,
@@ -66,7 +65,8 @@ import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.c
     MatAutocompleteModule,
     ComponentsModule,
     DataTablesModule,
-    FullCalendarModule
+    FullCalendarModule,
+
   ],
   declarations: [
     DashboardComponent,
@@ -94,8 +94,11 @@ import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.c
     CallComponent,
     AIComponent,
     InfoPageComponent
+
   ],
-  providers: [UserService, TranslateService, SmsService, SchedulingService, SettingsService, EmailService]
+  providers: [
+   UserService, TranslateService, SmsService, SchedulingService, SettingsService, EmailService
+  ]
 })
 
 export class AdminLayoutModule {}
