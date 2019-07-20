@@ -47,6 +47,7 @@ import { PrintComponent } from 'app/customer-engagement/print/print.component';
 import { AIComponent } from 'app/customer-engagement/AI/ai.component';
 import { EmailService } from 'app/service/email.service';
 import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.component';
+import { ReviewService } from 'app/service/review.service';
 
 
 
@@ -97,7 +98,7 @@ import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.c
 
   ],
   providers: [
-   UserService, TranslateService, SmsService, SchedulingService, SettingsService, EmailService
+   UserService, TranslateService, SmsService, SchedulingService, SettingsService, EmailService, ReviewService
   ]
 })
 

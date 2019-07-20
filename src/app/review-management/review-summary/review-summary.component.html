@@ -1,46 +1,127 @@
+<style>
+    i {
+        width:25px;
+        vertical-align:middle;
+     }
+     i.blue{
+        color: #42A5F5
+     }
+     i.yellow {
+         color: #FBBC04
+     }
+     i.red {
+         color: rgb(247, 59, 109)
+     }
+</style>
+<br/>
+<div class="text-center">
+    <h5>American Bounty Restaurant</h5>
+</div>
 <div class="row">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header card-header">
-                    <h4 class="card-title"> Last Google review</h4>
+                    <h4 class="card-title"> Google reviews 
+                        <span *ngIf="googleReviews" class="pull-right">
+                            <i class="material-icons blue">star_rate</i>
+                            {{googleReviews.averageRating}}
+                        </span>
+                    </h4>
                 </div>
-                <div class="card-body">
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
+                <div class="card-body " *ngIf="googleReviews" style="height:400px; overflow-y:scroll" >
+                        <div *ngFor="let item of googleReviews.reviews">
+                            <h6>{{item.fullName}}</h6>
+                            <div>
+                                <i>{{item.postDate}}</i> 
+                                <span *ngIf="item.starRating">
+                                     / 
+                                        <i class="material-icons yellow">star_rate</i>
+                                        {{item.starRating.trim().substr(0,1)}}
+                                </span>
+                            </div>
+                            <div>
+                                {{item.postReview}}
+                            </div>
+                            <br/>
+                        </div>
+                        <app-loader *ngIf="googleLoading"></app-loader>
+                </div>
+                <div class="card-footer">
+                    <a *ngIf="googleReviews" href="{{googleReviews.url}}" target="_blank">Go to Google page</a>                        
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header card-header">
-                    <h4 class="card-title"> Last Facebook review</h4>
+                    <h4 class="card-title"> Facebook reviews 
+                        <span *ngIf="fbReviews" class="pull-right">
+                            <i class="material-icons blue">star_rate</i>
+                            {{fbReviews.averageRating}}
+                        </span>
+                        
+                    </h4>
                 </div>
-                <div class="card-body">
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
+                <div class="card-body " *ngIf="fbReviews" style="height:400px; overflow-y:scroll" >
+                        <div *ngFor="let item of fbReviews.reviews">
+                            <h6>{{item.fullName}}</h6>
+                            <div>
+                                <i>{{item.postDate}}</i> 
+                                <span *ngIf="item.starRating">
+                                     / 
+                                        <i class="material-icons yellow">star_rate</i>
+                                        {{item.starRating.trim().substr(0,1)}}
+                                </span>
+                                <span *ngIf="item.recommendation">
+                                        / 
+                                           <i *ngIf="item.recommendation.indexOf('doesn\'t') >= 0"class="material-icons red">thumb_down</i>
+                                           <i *ngIf="item.recommendation.indexOf('recommends') >= 0"class="material-icons blue">thumb_up</i>
+                                          
+                                   </span>
+                            </div>
+                            <div>
+                                {{item.postReview}}
+                            </div>
+                            <br/>
+                        </div>
+                        <app-loader *ngIf="fbLoading"></app-loader>
+                </div>
+                <div class="card-footer">
+                    <a *ngIf="fbReviews" href="{{fbReviews.url}}" target="_blank">Go to Facebook page</a>                        
                 </div>
             </div>
         </div>
         <div class="col-md-4">
                 <div class="card">
                     <div class="card-header card-header">
-                        <h4 class="card-title"> Last Yelp review</h4>
+                        <h4 class="card-title"> Yelp reviews 
+                            <span *ngIf="yelpReviews" class="pull-right">
+                                <i class="material-icons blue">star_rate</i>
+                                {{yelpReviews.averageRating}}
+                            </span>
+                        </h4>
                     </div>
-                    <div class="card-body">
-                            <br>
-                            <br>
-                            <br>
-                            <br>  
-                            <br>
-                            <br>
+                    <div class="card-body " *ngIf="yelpReviews" style="height:400px; overflow-y:scroll" >
+                            <div *ngFor="let item of yelpReviews.reviews">
+                                <h6>{{item.user.name}}</h6>
+                                <div>
+                                    <i>{{item.time_created | date:'medium'}}</i> 
+                                    <span *ngIf="item.rating">
+                                         / 
+                                            <i class="material-icons yellow">star_rate</i>
+                                            {{item.rating}}
+                                    </span>
+                                </div>
+                                <div>
+                                    {{item.text}}
+                                </div>
+                                <br/>
+                            </div>
+                            
+                    </div>
+                    <app-loader *ngIf="yelpLoading"></app-loader>
+                    <div class="card-footer">
+                        <a *ngIf="yelpReviews" href="{{yelpReviews.url}}" target="_blank">Go to Yelp page</a>                        
                     </div>
                 </div>
         </div>
@@ -50,30 +131,51 @@
         <div class="col-md-5 ">
             <div class="card">
                 <div class="card-header card-header">
-                    <h4 class="card-title"> Last TripAdvisor review</h4>
+                    <h4 class="card-title"> TripAdvisor reviews 
+                        <span *ngIf="taReviews" class="pull-right">
+                            <i class="material-icons blue">star_rate</i>
+                            {{taReviews.averageRating}}
+                        </span>
+                    </h4>
                 </div>
-                <div class="card-body">
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
-                        <br>
+                <div class="card-body " *ngIf="taReviews" style="height:400px; overflow-y:scroll" >
+                        <div *ngFor="let item of taReviews.reviews">
+                            <h6>{{item.fullName}}</h6>
+                            <div>
+                                <i>{{item.postDate}}</i> 
+                                <span *ngIf="item.starRating">
+                                       / 
+                                        <i class="material-icons yellow">star_rate</i>
+                                        {{getTAStars(item.starRating.trim())}}
+                                </span>
+                            </div>
+                            <div>
+                                {{item.postReview}}
+                            </div>
+                            <br/>
+                        </div>
+                        <app-loader *ngIf="taLoading"></app-loader>
+                </div>
+                <div class="card-footer">
+                        <a *ngIf="taReviews" href="{{taReviews.url}}" target="_blank">Go to Tripadvisor page</a>                        
                 </div>
             </div>
         </div>
         <div class="col-md-5">
             <div class="card">
                 <div class="card-header card-header">
-                    <h4 class="card-title"> Last BBB review</h4>
+                    <h4 class="card-title"> BBB review</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="height:400px">
                         <br>
                         <br>
                         <br>
                         <br>
                         <br>
                         <br>
+                </div>
+                <div class="card-footer">
+                     
                 </div>
             </div>
         </div>
