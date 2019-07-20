@@ -87,7 +87,7 @@ export class SmsMessagesComponent implements OnInit {
 
     var queryData = "";
     let  columns = this.dtOptions.columns;
-    console.log(columns)
+    // console.log(columns)
 
     const pageSize = dataTablesParameters.length;
     const fromRecords = dataTablesParameters.start;

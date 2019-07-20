@@ -26,6 +26,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { Constants } from './helper/constant/constants';
+import { FirstPageComponent } from './website/first-page.component';
 
 @NgModule({
   imports: [
@@ -53,13 +54,14 @@ import { Constants } from './helper/constant/constants';
     LoginComponent,
     RegisterComponent,
     ForgotPasswordComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    FirstPageComponent
 
   ],
   providers: [AuthenticationService, UserService, AuthGuard, UserContext,
      // {
     //     provide: RECAPTCHA_SETTINGS,
-    //     useValue: { siteKey: '6LciFK0UAAAAANd8YTRXpZLzySXUa_eN7VtRjiFR' } as RecaptchaSettings,
+    //     useValue: { siteKey: 'xxxx' } as RecaptchaSettings,
     //   },
   
     { provide: RECAPTCHA_V3_SITE_KEY, useValue: Constants.CaptchaSiteKey},

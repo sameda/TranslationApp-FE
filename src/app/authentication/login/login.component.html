@@ -36,7 +36,8 @@ grecaptcha.ready(function() {
                           </div>
                           <button [disabled]="!loginForm.form.valid "type="submit" class="btn btn-primary btn-user btn-block">
                             Login
-                          </button>         
+                          </button>     
+                          <app-loader *ngIf="loading"></app-loader>    
                         </form>
              
                         <hr>

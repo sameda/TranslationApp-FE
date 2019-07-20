@@ -9,14 +9,20 @@ import { AuthGuard } from './common/guard/auth-guard';
 import { RegisterComponent } from './authentication/register/register.component';
 import { ForgotPasswordComponent } from './authentication/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
+import { FirstPageComponent } from './website/first-page.component';
 
 const routes: Routes =[
+  // {
+  //   path: '',
+  //   redirectTo: 'website',
+  //   pathMatch: 'full',
+  //   canActivate: [AuthGuard]
+  // }, 
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-    canActivate: [AuthGuard]
-  }, {
+    component: FirstPageComponent
+  },
+  {
     path: '',
     component: AdminLayoutComponent,
     children: [{
@@ -41,6 +47,7 @@ const routes: Routes =[
     path: 'reset-password',
     component: ResetPasswordComponent
   }
+ 
 ];
 
 @NgModule({

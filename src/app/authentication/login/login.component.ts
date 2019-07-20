@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     password: "",
     captchaResponse: ""
   };
+  loading = false;
 
   constructor(private authenticationService: AuthenticationService, private router: Router,
     private recaptchaV3Service: ReCaptchaV3Service
@@ -27,24 +28,27 @@ export class LoginComponent implements OnInit {
   }
 
   secureWithCaptcha(){
-    this.recaptchaV3Service.execute('action')
-    .subscribe(token => {    
+    this.loading = true;
+    this.recaptchaV3Service.execute('action').subscribe(token => {    
       this.loginUser(token);
-      });
+      }
+      , err => {
+        this.loading = false;
+       });
   }
     
   
-  loginUser(token){
+  loginUser(token){   
     this.login.captchaResponse = token;
     this.authenticationService.login(this.login).subscribe(resp => {
       if(resp.status == 200) {
         // HelperFunctions.showNotification('bottom', 'right', 'Successfully logged in', 'success')
         localStorage.setItem('token', resp.body.access_token);
-        this.router.navigate(['']);
+        this.router.navigate(['/dashboard']);
       }
     }, err => {
         HelperFunctions.showNotification('bottom', 'right', err.error.detailedMessage, 'danger')
-    })
+    }, () => this.loading = false)
   }
 
 }
