@@ -17,6 +17,7 @@ export const ROUTES: RouteInfo[] = [
     { path: '/competitor-edge', title: 'Competitor Edge',  icon:'library_books', class: '' },
     { path: '/user-profile', title: 'User Profile',  icon:'person', class: '' },
     { path: '/support', title: 'Support',  icon:'call', class: '' },
+    { path: '/services-purchase', title: 'Services purchase',  icon:'add_shopping_cart', class: '' },
     // { path: '/table-list', title: 'Table List',  icon:'content_paste', class: '' },
     // { path: '/typography', title: 'Typography',  icon:'library_books', class: '' },
     // { path: '/icons', title: 'Icons',  icon:'bubble_chart', class: '' },

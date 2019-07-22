@@ -26,6 +26,8 @@ import { PrintComponent } from 'app/customer-engagement/print/print.component';
 import { CallComponent } from 'app/customer-engagement/call/call.component';
 import { AIComponent } from 'app/customer-engagement/AI/ai.component';
 import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.component';
+import { ServicesPurchaseComponent } from 'app/payment/services-purchase/services-purchase.component';
+import { PaymentSuccessComponent } from 'app/payment/payment-success/payment-success.component';
 
 export const AdminLayoutRoutes: Routes = [
 
@@ -107,6 +109,9 @@ export const AdminLayoutRoutes: Routes = [
       }
     ] },
     { path: 'support', canActivate: [AuthGuard], component: SupportComponent },
-    { path: 'competitor-edge/info-page', canActivate: [AuthGuard], component: InfoPageComponent }
-
+    { path: 'competitor-edge/info-page', canActivate: [AuthGuard], component: InfoPageComponent },
+    { path: 'services-purchase', canActivate: [AuthGuard], component: ServicesPurchaseComponent },
+    { path: 'payment-success', canActivate: [AuthGuard], component: PaymentSuccessComponent }
+    
+    
 ];

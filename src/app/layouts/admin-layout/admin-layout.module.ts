@@ -48,6 +48,8 @@ import { AIComponent } from 'app/customer-engagement/AI/ai.component';
 import { EmailService } from 'app/service/email.service';
 import { InfoPageComponent } from 'app/competitor-analysis/info-page/info-page.component';
 import { ReviewService } from 'app/service/review.service';
+import { ServicesPurchaseComponent } from 'app/payment/services-purchase/services-purchase.component';
+import { PaymentSuccessComponent } from 'app/payment/payment-success/payment-success.component';
 
 
 
@@ -94,7 +96,9 @@ import { ReviewService } from 'app/service/review.service';
     PrintComponent,
     CallComponent,
     AIComponent,
-    InfoPageComponent
+    InfoPageComponent,
+    ServicesPurchaseComponent,
+    PaymentSuccessComponent
 
   ],
   providers: [

@@ -1,0 +1,166 @@
+
+
+<div class="main-content">
+     <div class="container-fluid">
+        <ng-container *ngIf="!checkout">
+            <div class="wrapper">
+                <div class = "row pull-right">
+                            <a class="pointer" id="sidebarCollapse" (click)="toggleSidebar()">
+                                <i *ngIf="!sidebarOpen" class="material-icons">menu</i>                          
+                                <i *ngIf="sidebarOpen" class="material-icons">clear</i>                          
+                            </a>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header card-header">
+                                <h4 class="card-title">Pick & Choose</h4>
+                            </div>
+                            <div class="card-body" *ngIf="serviceList">
+                                <div>
+                                    Customer Engagement
+                                    <div class="row" *ngFor="let item of customerServices">
+                                        <div class="col-md-4 col-sm-4"> {{item.name}} </div>
+                                        <div class="col-md-3 col-sm-3"> {{item.price}} $ </div>
+                                        <div class="col-md-3 col-sm-3 pull-right">  
+                                            <a *ngIf="!item.selected" class="pointer" (click)="addItem(item)"><i class="material-icons blue">add_circle</i>  </a> 
+                                            <i *ngIf="item.selected"class="material-icons green">check</i>                                   
+                                        </div>
+                                    </div>
+                                </div>  
+                                <br>                     
+                                <div>
+                                    Employee Engagement
+                                    <div class="row" *ngFor="let item of employeeServices">
+                                        <div class="col-md-4 col-sm-4"> {{item.name}} </div>
+                                        <div class="col-md-3 col-sm-3"> {{item.price}} $ </div>
+                                        <div class="col-md-3 col-sm-3 col-md-offset-2">  
+                                            <a *ngIf="!item.selected" class="pointer" (click)="addItem(item)"><i class="material-icons blue">add_circle</i>  </a> 
+                                            <i *ngIf="item.selected"class="material-icons green">check</i>                                   
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    Competitive Edge
+                                    <div class="row"  *ngFor="let item of competitorServices">
+                                        <div class="col-md-4 col-sm-4"> {{item.name}} </div>
+                                        <div class="col-md-3 col-sm-3"> {{item.price}} $ </div>
+                                        <div class="col-md-3 col-sm-3 col-md-offset-2">  
+                                            <a *ngIf="!item.selected" class="pointer" (click)="addItem(item)"><i class="material-icons blue">add_circle</i>  </a> 
+                                            <i *ngIf="item.selected"class="material-icons green">check</i>                                   
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div>
+                                    Review Management
+                                    <div class="row" *ngFor="let item of reviewServices">
+                                        <div class="col-md-4 col-sm-4"> {{item.name}} </div>
+                                        <div class="col-md-3 col-sm-3"> {{item.price}} $ </div>
+                                        <div class="col-md-3 col-sm-3 col-md-offset-2">  
+                                            <a *ngIf="!item.selected" class="pointer" (click)="addItem(item)"><i class="material-icons blue">add_circle</i>  </a> 
+                                            <i *ngIf="item.selected"class="material-icons green">check</i>                                   
+                                        </div>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="width:200px">
+                        <a [routerLink]="['/services-purchase']">
+                            <div class="card">
+                                <div class="card-header card-header">
+                                    <h4 class="card-title">Standart Package</h4>
+                                </div>
+                                <div class="card-body">
+                                            
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>  
+                                        <br>
+                                        <br>
+                                        <br>      
+                                    
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-3" style="width:200px">
+                        <a [routerLink]="['/services-purchase']">
+                            <div class="card">
+                                <div class="card-header card-header">
+                                    <h4 class="card-title">Enhanced Package</h4>
+                                </div>
+                                <div class="card-body">
+                                                                    
+                                        <br>
+                                        <br>
+                                        <br>  
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                </div>
+                            </div>
+                        </a>
+                    </div>                     
+                </div>
+                <nav id="sidebar" class=" left-sidebar card">    
+                        <div class="card-header">
+                                <h4>Chosen items</h4>  
+                        </div>
+                        <div class="card-body">                   
+                            <div class="row" *ngFor="let item of selectedServices">
+                                <div class="col-md-4 col-sm-4"> {{item.name}} </div>
+                                <div class="col-md-3 col-sm-3"> {{item.price}} $ </div>
+                                <div class="col-md-3 col-sm-3 pull-right">  
+                                    <a  class="pointer" (click)="removeItem(item)"><i class="material-icons red">clear</i>  </a>                          
+                                </div>
+                            </div>
+                            <br/>
+                            <hr/>
+                            <h5>Total: <b>{{total}} $</b></h5>
+                            <br/>
+                            <br/>
+                            <button mat-raised-button type="submit" [disabled]="selectedServices.length==0" (click)="goToCheckout()" class="btn btn-success ">Checkout</button>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                </nav>   
+            </div>
+        </ng-container>
+        <ng-container *ngIf="checkout">
+            <div class="card col-md-10">
+                <div class="card-header">
+                        <h3>Final checkout
+                            <a class="pointer" (click)="goToOrder()" title="Cancel">
+                                <i class="material-icons pull-right">clear</i>
+                            </a>
+                        </h3>  
+                        
+                </div>
+                <div class="card-body">                   
+                        <div class="row" *ngFor="let item of selectedServices">
+                            <div class="col-md-3 col-sm-3"> {{item.name}} </div>
+                            <div class="col-md-2 col-sm-2"> {{item.price}} $ </div>
+                            <div class="col-md-3 col-sm-3 pull-right">  
+                                <a  class="pointer" (click)="removeItem(item)"><i class="material-icons red">clear</i>  </a>                          
+                            </div>
+                        </div>
+                        <br/>
+                        <hr/>
+                        <h5>Total: <b>{{total}} $</b></h5>
+                       
+                        <button mat-raised-button type="submit" [disabled]="selectedServices.length==0" (click)="goToPaypal()" class="btn btn-success pull-right">Paypal/Shopify checkout</button>
+                        <div class="clearfix"></div>
+                </div>
+            </div>
+        </ng-container>
+    </div>    
+</div>

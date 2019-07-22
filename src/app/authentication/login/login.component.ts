@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       }
     }, err => {
+        this.loading = false
         HelperFunctions.showNotification('bottom', 'right', err.error.detailedMessage, 'danger')
     }, () => this.loading = false)
   }

@@ -91,7 +91,7 @@
     <tbody *ngIf="smsLogs?.length != 0">
         <tr *ngFor="let sms of smsLogs; let i = index">
             <td>{{i+1}}</td>
-            <td>{{ sms.createdDate | date: 'short' }}</td>
+            <td>{{ sms.createdDate.toLocaleString() | date: 'short' }}</td>
             <td>{{ sms.twilioId }}</td>
             <td>{{ sms.phoneNumber }}</td>
             <td>{{ getLanguage(sms.languageCode) }}</td>
