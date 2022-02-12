@@ -37,7 +37,7 @@
     "@fullcalendar/interaction": "^4.2.0",
     "@fullcalendar/list": "^4.2.0",
     "@fullcalendar/timegrid": "^4.2.0",
-    "ajv": "6.4.0",
+    "ajv": "6.12.3",
     "angular-datatables": "^8.0.0",
     "angular2-jwt": "^0.2.3",
     "arrive": "2.4.1",
